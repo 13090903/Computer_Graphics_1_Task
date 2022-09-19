@@ -20,6 +20,7 @@ public class DrawPanel extends JPanel {
     private static final Random rnd = new Random();
 
     private Star[] stars = new Star[15 + rnd.nextInt(25)];
+    private Moon moon1;
     private Moon moon;
     private Tree[] trees = new Tree[9];
     private House house;
