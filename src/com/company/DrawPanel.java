@@ -20,11 +20,14 @@ public class DrawPanel extends JPanel {
     private static final Random rnd = new Random();
 
     private Star[] stars = new Star[15 + rnd.nextInt(25)];
+    private Cloud[] clouds = new Cloud[3 + rnd.nextInt(3)];
     private Moon moon;
-    private Tree[] trees = new Tree[9];
+    private Tree[] trees = new Tree[30];
     private House house;
     private Sun sun;
     private Balloon balloon;
+    private Sign sign1;
+
     private Timer t;
 
 
@@ -34,13 +37,17 @@ public class DrawPanel extends JPanel {
         for (int i = 0; i < stars.length; i++) {
             stars[i] = new Star(130 + rnd.nextInt(700), 30 + rnd.nextInt(230), 1 + rnd.nextInt(2), new Color(255 - rnd.nextInt(40), 255 - rnd.nextInt(40), 255, 255));
         }
+        for (int i = 0; i < clouds.length; i++) {
+            clouds[i] = new Cloud(-400 - rnd.nextInt(700), 60 + rnd.nextInt(330), 10 + rnd.nextInt(30), new Color(255 - rnd.nextInt(20), 255 - rnd.nextInt(20), 255 - rnd.nextInt(20), 250));
+        }
         sun = new Sun(-800, 80, 30, 30, 12, new Color(255, 128, 0, 255));
-        moon = new Moon(80, 80, 30 + rnd.nextInt(20), new Color(255, 255, 255, 255));
+        moon = new Moon(80, 80, 30 + rnd.nextInt(20), new Color(241, 237, 237, 255));
         for (int i = 0; i < trees.length; i++) {
-            trees[i] = new Tree(500 + i * 30, 450 - 50 + rnd.nextInt(100), TREE_COLOR);
+            trees[i] = new Tree(430 + i * 12, 450 - 70 + rnd.nextInt(120), TREE_COLOR);
         }
         house = new House(50, 360, 100, WALLS_COLOR, ROOF_COLOR, WINDOW_COLOR, LIGHT_COLOR);
         balloon = new Balloon(325, 285, 100, Color.RED, Color.BLUE, Color.YELLOW, Color.GREEN, Color.ORANGE, Color.RED);
+        sign1 = new Sign(130, 490, 65, 35, "Private Area!", new Font("Vin Slab Pro", Font.BOLD, 16), new Color(150, 75, 0));
         t = new Timer(20, new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -63,7 +70,7 @@ public class DrawPanel extends JPanel {
                     balloon.setC6(new Color(balloon.getC6().getRed(), balloon.getC6().getGreen(), balloon.getC6().getBlue(), 255));
                     balloon.setC5(new Color(balloon.getC5().getRed(), balloon.getC5().getGreen(), balloon.getC5().getBlue(), 255));
                 }
-                if (sun.getX() > 350 || sun.getX() < - 80) {
+                if (sun.getX() > 350 || sun.getX() < -80) {
                     if (balloon.getY() < 285) {
                         balloon.setY(balloon.getY() + 1);
                     }
@@ -85,6 +92,22 @@ public class DrawPanel extends JPanel {
                     }
                     if (stars[i].getY() > 350) {
                         stars[i].setY(50 + rnd.nextInt(200));
+                    }
+                }
+                for (int i = 0; i < clouds.length; i++) {
+                    if (sun.getX() == -80 && clouds[i].getX() > 800 && clouds[i].getX()<-80 && moon.getX() > 600){
+                        clouds[i].setX(-80 - rnd.nextInt(100));
+                    }
+                    if (moon.getX() > 600 || moon.getX() < 200) {
+                        clouds[i].setX(clouds[i].getX() + 1 + rnd.nextInt(2));
+                    }
+                    if ((clouds[i].getX() > getWidth() + clouds[i].getR() * 5) && sun.getX() < 500) {
+                        clouds[i].setX(-400 - rnd.nextInt(300));
+                        if (clouds[i].getY() < 300) {
+                            clouds[i].setY(clouds[i].getY() - 50 + rnd.nextInt(200));
+                        } else {
+                            clouds[i].setY(clouds[i].getY() - rnd.nextInt(200));
+                        }
                     }
                 }
                 if (moon.getX() == 720) {
@@ -127,6 +150,10 @@ public class DrawPanel extends JPanel {
         sun.draw(g2d);
         g2d.setColor(SKY_COLOR);
         g2d.fillRect(0, 0, getWidth(), getHeight());
+
+        for (int i = 0; i < clouds.length; i++) {
+            clouds[i].draw(g2d);
+        }
         g2d.setColor(GROUND_COLOR);
         g2d.fillOval(0, 370, 800, 400);
         g2d.fillOval(-50, 430, 200, 267);
@@ -159,5 +186,6 @@ public class DrawPanel extends JPanel {
 
         house.draw(g2d);
         balloon.draw(g2d);
+        sign1.draw(g2d);
     }
 }

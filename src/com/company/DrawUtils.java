@@ -191,5 +191,40 @@ public class DrawUtils {
 
     }
 
+    public static void drawSign(Graphics2D g, int x, int y, int len, int wid, String text, Font font, Color c) {
+        g.setColor(new Color(c.getRed() - 15, c.getGreen() - 15, c.getBlue()));
+        g.setStroke(new BasicStroke(5));
+        g.fillRect(x + len/2, y + wid, wid/6, len*2/3);
+        g.setColor(Color.BLACK);
+        g.setStroke(new BasicStroke(1));
+        g.drawRect(x + len/2, y + wid, wid/6, len*2/3);
+        g.drawRect(x, y, len, wid);
+        g.setColor(Color.BLACK);
+        g.setStroke(new BasicStroke(1));
+        g.drawRect(x, y, len, wid);
+        g.setColor(c);
+        g.fillRect(x, y, len, wid);
+        g.setFont(font);
+        g.setColor(Color.BLACK);
+        String[] t = text.split(" ");
+        for (int i = 0; i < t.length; i++) {
+            g.drawString(t[i], x + len/2 - t[i].length()*font.getSize()/4, y + wid/(t.length + 1) + i*font.getSize() + 5);
+        }
+    }
+
+    public static void drawCloud(Graphics2D g, int x, int y, int r, Color c) {
+        g.setColor(c);
+        GeneralPath path = new GeneralPath();
+        path.moveTo(x + r, y);
+        path.lineTo(x + 4*r, y);
+        path.lineTo(x + 4*r, y - 10);
+        path.lineTo(x + r, y - 10);
+        path.lineTo(x + r, y);
+        g.fill(path);
+        g.drawLine(x + r, y - 3, x + 4*r, y - 3);
+        g.fillOval(x, y - 2*r, 2*r, 2*r);
+        g.fillOval(x + r, y - 3*r, 3*r, 3*r);
+        g.fillOval(x + 3*r, y - 10*r/6, 10*r/6, 10*r/6);
+    }
 
 }
